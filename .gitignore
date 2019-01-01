@@ -1,0 +1,4 @@
+# Ignores
+auto-save-list/
+elpa/
+ido.last
