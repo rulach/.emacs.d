@@ -1,9 +1,21 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Fichero de configuracion de emacs ;;
-;;				     ;;
-;; Creado por: rulach                ;;
-;; Fecha creacion: 1/1/2019          ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Created by: Raúl Carretero (rulach)  ;;
+;; E-mail: raul@rcarretero.com          ;;
+;; Creation date: 1/1/2019              ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Add files and folders to path
+(add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "settings/" user-emacs-directory))
+
+(setq settings-file (expand-file-name "settings.el" user-emacs-directory))
+(load settings-file)
+
+;; Load settings files
+(require 'key-bindings)
+(require 'modeline)
+
 
 ;; Elimina el mensaje de bienvenida
 (package-initialize)
@@ -14,8 +26,6 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 
-;; Desmapea el C-z
-(global-unset-key (kbd "C-z"))
 
 ;; Cambia "yes" y "no" por "y" y por "n"
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -32,8 +42,7 @@ trash-directory "~/.local/share/Trash/files")
 (setq make-backup-files nil)
 (setq auto-save-default nil)
 
-;; Carpetas adicionales del path
-(add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
+
 
 ;; Buffers abiertos al pulsar C-x b (ido)
 (ido-mode 1)
@@ -58,35 +67,6 @@ trash-directory "~/.local/share/Trash/files")
 ;; Mostrar fecha y hora en formato 24 horas:
 (setq display-time-day-and-date t display-time-24hr-format t)
 (display-time)
-
-;; Abre terminal ansi-term con bash al pulsar F5
-(global-set-key (kbd "<f5>") '(lambda ()(interactive)(ansi-term "/bin/bash")))
-
-
-;; Movimiento entre ventanas y ajuste de tamaño de estas
-(global-set-key (kbd "C-x <up>") 'windmove-up)
-(global-set-key (kbd "C-x <down>") 'windmove-down)
-(global-set-key (kbd "C-x <left>") 'windmove-left)
-(global-set-key (kbd "C-x <right>") 'windmove-right)
-
-(global-set-key (kbd "M-<up>") 'enlarge-window)
-(global-set-key (kbd "M-<down>") 'shrink-window)
-(global-set-key (kbd "M-<left>") 'shrink-window-horizontally)
-(global-set-key (kbd "M-<right>") 'enlarge-window-horizontally)
-
-;; ;; Cambiar de buffer
-;; (global-set-key (kbd "<backtab>") 'next-buffer)
-
-;; Borrado de palabras (ajuste para modo terminal -nw)
-(global-set-key [(control ?h)] 'backward-kill-word)
-(global-set-key (kbd "C-M-h") 'backward-kill-word)
-
-;; Scroll de la pantalla
-(setq scroll-preserve-screen-position 1)
-(global-set-key (kbd "M-p") (kbd "C-u 1 M-v"))
-(global-set-key (kbd "M-n") (kbd "C-u 1 C-v"))
-(setq next-line-add-newlines t)
-
 
 ;; Carga el repositorio de MELPA
 (when (>= emacs-major-version 24)
@@ -125,12 +105,9 @@ trash-directory "~/.local/share/Trash/files")
 ;; Redo y undo
 (require-package 'undo-tree)
 (global-undo-tree-mode)
-(global-set-key (kbd "C-z") (kbd "C-_"))
-(global-set-key (kbd "M-z") (kbd "M-_"))
 
 ;; Coloreado de la linea actual
 (global-hl-line-mode 1)
-;; (set-face-background 'hl-line "#2E8769")
 (set-face-foreground 'hl-line nil)
 (set-face-underline  'hl-line t)
 
@@ -140,89 +117,6 @@ trash-directory "~/.local/share/Trash/files")
     (set-face-background 'default "unspecified-bg" (selected-frame))))
 (add-hook 'window-setup-hook 'on-after-init)
 
-;; Formato de mode-line
-mode-line-format
-(setq-default mode-line-format
-	      '(;; Solo escritura y fichero modificado
-		" %2 "
-		(:eval
-		 (cond (buffer-read-only
-			(propertize " RO " 'face 'mode-line-read-only-face))
-		       ((buffer-modified-p)
-			(propertize " ** " 'face 'mode-line-modified-face))
-		       ))
-
-		;; Directorio y fichero
-		" %1 "
-		(:propertize (:eval (shorten-directory default-directory 30))
-			     face mode-line-folder-face)
-		(:propertize "%b"
-			     face mode-line-filename-face)
-
-		;; Linea y columna
-		" %2 [%l:%p]"
-
-		;; Modo de edicion
-		" %2 "
-		(:propertize " %m " face mode-line-mode-face)
-
-		;; Fecha y hora
-		" %2 "
-		(global-mode-string global-mode-string)
-		))
-
-;; Funcion para la carpeta del path del fichero
-(defun shorten-directory (dir max-length)
-  "Show up to `max-length' characters of a directory name `dir'."
-  (let ((path (reverse (split-string (abbreviate-file-name dir) "/")))
-	(output ""))
-    (when (and path (equal "" (car path)))
-      (setq path (cdr path)))
-    (while (and path (< (length output) (- max-length 4)))
-      (setq output (concat (car path) "/" output))
-      (setq path (cdr path)))
-    (when path
-      (setq output (concat ".../" output)))
-    output))
-
-;; Colores de cada bloque del mode-line
-(make-face 'mode-line-read-only-face)
-(make-face 'mode-line-modified-face)
-(make-face 'mode-line-folder-face)
-(make-face 'mode-line-filename-face)
-(make-face 'mode-line-mode-face)
-
-(set-face-attribute 'mode-line nil
-    :foreground "gray80" :background "#326252"
-    :box '(:color "#326252" :style nil))
-
-(set-face-attribute 'mode-line-inactive nil
-    :foreground "gray80" :background "gray40"
-    :box '(:color "gray40" :style nil))
-
-(set-face-attribute 'mode-line-read-only-face nil
-    :inherit 'mode-line-face
-    :foreground "#4271ae"
-    :box '(:line-width 2 :color "#4271ae"))
-
-(set-face-attribute 'mode-line-modified-face nil
-    :inherit 'mode-line-face
-    :foreground "#c82829"
-    :background "#ffffff"
-    :box '(:line-width 2 :color "#c82829"))
-
-(set-face-attribute 'mode-line-folder-face nil
-    :inherit 'mode-line-face
-    :foreground "grey90")
-
-(set-face-attribute 'mode-line-filename-face nil
-    :inherit 'mode-line-face
-    :foreground "#eab700"
-    :weight 'bold)
-
-(set-face-attribute 'mode-line-mode-face nil
-    :inherit 'mode-line-face
-    :foreground "gray90" :background "#2E8166")
 
 
 ;; NO TOCAR A PARTIR DE AQUI
