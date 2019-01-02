@@ -82,4 +82,4 @@ mode-line-format
     :inherit 'mode-line-face
     :foreground "gray90" :background "#2E8166")
 
-(provide 'modeline)
+(provide 'setup-mode-line)

@@ -23,7 +23,19 @@
 (require-package 'material-theme)
 (load-theme 'material t)
 
+;; Current line colour
+(global-hl-line-mode 1)
+(set-face-foreground 'hl-line nil)
+(set-face-underline  'hl-line t)
+
 ;; Fonts size
 (set-face-attribute 'default nil :height 100)
 
-(provide 'appearance)
+;; Transparent when -nw mode
+(defun on-after-init ()
+  (unless (display-graphic-p (selected-frame))
+    (set-face-background 'default "unspecified-bg" (selected-frame))))
+(add-hook 'window-setup-hook 'on-after-init)
+
+
+(provide 'setup-appearance)

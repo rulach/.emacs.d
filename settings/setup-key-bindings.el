@@ -31,4 +31,8 @@
 (global-set-key (kbd "C-z") (kbd "C-_"))
 (global-set-key (kbd "M-z") (kbd "M-_"))
 
-(provide 'key-bindings)
+;; Comments
+(global-set-key (kbd "C--") 'comment-line)
+(global-set-key (kbd "M--") 'comment-line)
+
+(provide 'setup-key-bindings)

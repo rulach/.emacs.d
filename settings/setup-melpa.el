@@ -19,4 +19,4 @@
         (package-refresh-contents)
         (require-package package min-version t)))))
 
-(provide 'melpa)
+(provide 'setup-melpa)
