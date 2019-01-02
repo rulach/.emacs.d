@@ -13,18 +13,13 @@
 (load settings-file)
 
 ;; Load settings files
+(require 'melpa)
 (require 'key-bindings)
 (require 'modeline)
+(require 'visualization)
 
 
-;; Elimina el mensaje de bienvenida
-(package-initialize)
-(setq inhibit-startup-message t)
 
-;; Elimina los menus y la barra de scroll
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
 
 
 ;; Cambia "yes" y "no" por "y" y por "n"
@@ -59,48 +54,14 @@ trash-directory "~/.local/share/Trash/files")
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 (add-hook 'write-file-hooks 'delete-trailing-whitespace nil t)
 
-;; Añadir un espacio entre el número de linea y el texto de la
-;; linea al lanzar M-x linum-mode (ver números de linea)
-(global-linum-mode t)
-(setq linum-format "%d ")
 
-;; Mostrar fecha y hora en formato 24 horas:
-(setq display-time-day-and-date t display-time-24hr-format t)
-(display-time)
-
-;; Carga el repositorio de MELPA
-(when (>= emacs-major-version 24)
-  (require 'package)
-  (add-to-list
-   'package-archives
-   '("melpa" . "http://melpa.org/packages/")
-   t))
-
-;; Funcion de instalacion de paquetes
-(defun require-package (package &optional min-version no-refresh)
-  (if (package-installed-p package min-version)
-      t
-    (if (or (assoc package package-archive-contents) no-refresh)
-        (if (boundp 'package-selected-packages)
-            (package-install package nil)
-          (package-install package))
-      (progn
-        (package-refresh-contents)
-        (require-package package min-version t)))))
 
 ;; Comentarios
 (global-set-key (kbd "C--") 'comment-line)
 (global-set-key (kbd "M--") 'comment-line)
 
-;; Parentesis
-(show-paren-mode t)
 
-;; Tema de emacs
-(require-package 'material-theme)
-(load-theme 'material t)
 
-;; Tamano de la fuente
-(set-face-attribute 'default nil :height 100)
 
 ;; Redo y undo
 (require-package 'undo-tree)
