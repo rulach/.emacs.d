@@ -26,4 +26,4 @@
 ;; Fonts size
 (set-face-attribute 'default nil :height 100)
 
-(provide 'visualization)
+(provide 'appearance)

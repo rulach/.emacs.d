@@ -16,7 +16,7 @@
 (require 'melpa)
 (require 'key-bindings)
 (require 'modeline)
-(require 'visualization)
+(require 'appearance)
 
 
 
