@@ -18,6 +18,7 @@
 (require 'setup-key-bindings)
 (require 'setup-appearance)
 (require 'setup-mode-line)
+(require 'setup-redo)
 
 ;; NO TOCAR A PARTIR DE AQUI
 (custom-set-variables
