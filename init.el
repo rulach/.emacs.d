@@ -12,18 +12,12 @@
 (setq settings-file (expand-file-name "settings.el" user-emacs-directory))
 (load settings-file)
 
-;; Load settings files
+;; Load setting files
 (require 'setup-melpa)
 (require 'setup-misc)
 (require 'setup-key-bindings)
 (require 'setup-appearance)
 (require 'setup-mode-line)
-
-
-;; Redo y undo
-(require-package 'undo-tree)
-(global-undo-tree-mode)
-
 
 ;; NO TOCAR A PARTIR DE AQUI
 (custom-set-variables
